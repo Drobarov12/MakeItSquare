@@ -14,7 +14,7 @@ namespace MakeItSquare
         public void Draw(Graphics g, Color color, int size)
         {
             Brush b = new SolidBrush(color);
-            g.FillRectangle(b, TopLeft.X *size , TopLeft.Y*size, size, size);
+            g.FillRectangle(b, TopLeft.X + 1 , TopLeft.Y + 1, size, size);
         }
     }
 }

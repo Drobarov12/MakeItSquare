@@ -55,7 +55,7 @@ namespace MakeItSquare
                     if (j <= BoardSize)
                         VerticalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i, j+1), IsDrawn = false };
                     if (i < BoardSize && j < BoardSize)
-                        Squares[i, j] = new Square { TopLeft = new Point(i, j), Owner = null };
+                        Squares[i, j] = new Square { TopLeft = new Point(i * DOT_SPACING, j * DOT_SPACING), Owner = null };
                 }
             }
 
