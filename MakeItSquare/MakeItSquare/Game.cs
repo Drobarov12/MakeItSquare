@@ -12,7 +12,7 @@ namespace MakeItSquare
         public int BoardSize { get; private set; }
         public Line[,] HorizontalLines { get; private set; }
         public Line[,] VerticalLines { get; private set; }
-        /*public Square[,] Squares { get; private set; }*/
+        public Square[,] Squares { get; private set; }
         public Player[] Players { get; private set; }
         private List<Point> dots;
         private int currentPlayerIndex;
@@ -34,7 +34,7 @@ namespace MakeItSquare
         {
             HorizontalLines = new Line[BoardSize + 1, BoardSize+1];
             VerticalLines = new Line[BoardSize + 1, BoardSize + 1];
-            /*Squares = new Square[BoardSize, BoardSize];*/
+            Squares = new Square[BoardSize, BoardSize];
 
             // Initialize lines and squares
             for (int i = 0; i <= BoardSize; i++)
@@ -54,8 +54,8 @@ namespace MakeItSquare
                         HorizontalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i+1,j), IsDrawn = false };
                     if (j <= BoardSize)
                         VerticalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i, j+1), IsDrawn = false };
-                   /* if (i < BoardSize && j < BoardSize)
-                        Squares[i, j] = new Square { TopLeft = new Point(i, j), Owner = null };*/
+                    if (i < BoardSize && j < BoardSize)
+                        Squares[i, j] = new Square { TopLeft = new Point(i, j), Owner = null };
                 }
             }
 
@@ -115,7 +115,7 @@ namespace MakeItSquare
             line.IsDrawn = true;
             bool squareCompleted = false;
 
-            /*
+            
             if (isHorizontal)
             {
                 // Check the square above and below the line
@@ -151,7 +151,7 @@ namespace MakeItSquare
                     GetCurrentPlayer().Score++;
                     squareCompleted = true;
                 }
-            }*/
+            }
 
             if (!squareCompleted)
             {
@@ -234,6 +234,11 @@ namespace MakeItSquare
                     if (i <= BoardSize && VerticalLines[i, j].IsDrawn)
                     {
                         VerticalLines[i, j].Draw(g, DOT_SPACING);
+                    }
+
+                    if(i < BoardSize && j < BoardSize && Squares[i,j].Owner != null)
+                    {
+                        Squares[i, j].Draw(g, Squares[i, j].Owner.Color, DOT_SPACING);
                     }
                 }
             }
