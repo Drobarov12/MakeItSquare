@@ -28,13 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            myPanel = new Panel();
             SuspendLayout();
+            // 
+            // myPanel
+            // 
+            myPanel.Location = new Point(73, 44);
+            myPanel.Name = "myPanel";
+            myPanel.Size = new Size(447, 347);
+            myPanel.TabIndex = 0;
+            myPanel.Paint += myPanel_Paint;
+            myPanel.MouseClick += myPanel_MouseClick;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(myPanel);
             Name = "Form1";
             Text = "Form1";
             Paint += Form1_Paint;
@@ -43,5 +54,7 @@
         }
 
         #endregion
+
+        private Panel myPanel;
     }
 }

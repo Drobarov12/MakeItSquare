@@ -59,7 +59,7 @@ namespace MakeItSquare
                 }
             }
 
-            /*DrawOutsideLines();*/
+            DrawOutsideLines();
 
         }
 
@@ -69,11 +69,13 @@ namespace MakeItSquare
             {
                 for (int j = 0; j <= BoardSize; j++)
                 {
-                    if(i == BoardSize || i == 0)
+                    if(i == 0 || i == BoardSize)
                     {
-                        int index = i * 4 + j;
-                        if(j+1 < BoardSize)
-                            AddLine(dots[i * 4 + j], dots[i * 4 + j+1]);
+                        VerticalLines[i, j].IsDrawn = true;
+                    }
+                    if(j == 0 || j == BoardSize)
+                    {
+                        HorizontalLines[i, j].IsDrawn = true;
                     }
                 }
             }
@@ -82,7 +84,7 @@ namespace MakeItSquare
 
         public Size GameSize()
         {
-            return new Size((BoardSize) * DOT_SPACING, (BoardSize) * DOT_SPACING);
+            return new Size((BoardSize * DOT_SPACING) +3, (BoardSize * DOT_SPACING)+3);
         }
 
         public bool AddLine(Point start, Point end)
@@ -179,6 +181,7 @@ namespace MakeItSquare
 
         public bool Clicked(Point clickedPoint)
         {
+
             Point? startPoint = null;
             Point? endPoint = null;
 

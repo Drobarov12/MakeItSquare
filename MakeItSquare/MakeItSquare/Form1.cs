@@ -23,21 +23,34 @@ namespace MakeItSquare
 
             _game = new Game(BOARD_SIZE, players);
 
-            this.ClientSize = _game.GameSize();
+            myPanel.ClientSize = _game.GameSize();
             Invalidate();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
-            _game.Draw(g);
+           /* Graphics g = e.Graphics;
+            _game.Draw(g);*/
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
+           /* Point clickedPoint = new Point(e.X, e.Y);
+            bool valid = _game.Clicked(clickedPoint);
+            if (valid) Invalidate();*/
+        }
+
+        private void myPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            _game.Draw(g);
+        }
+
+        private void myPanel_MouseClick(object sender, MouseEventArgs e)
+        {
             Point clickedPoint = new Point(e.X, e.Y);
             bool valid = _game.Clicked(clickedPoint);
-            if (valid) Invalidate();
+            if (valid) myPanel.Invalidate();
         }
     }
 }
