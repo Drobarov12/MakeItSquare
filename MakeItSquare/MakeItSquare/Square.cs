@@ -10,11 +10,12 @@ namespace MakeItSquare
     {
         public Point TopLeft { get; set; }
         public Player Owner { get; set; }
+        public int Size { get; set; }
 
-        public void Draw(Graphics g, Color color, int size)
+        public void Draw(Graphics g, Color color)
         {
             Brush b = new SolidBrush(color);
-            g.FillRectangle(b, TopLeft.X + 1 , TopLeft.Y + 1, size, size);
+            g.FillRectangle(b, TopLeft.X + 1 , TopLeft.Y + 1, Size, Size);
         }
     }
 }

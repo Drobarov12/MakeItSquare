@@ -51,11 +51,11 @@ namespace MakeItSquare
                 for (int j = 0; j <= BoardSize; j++)
                 {
                     if(i <= BoardSize)
-                        HorizontalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i+1,j), IsDrawn = false };
+                        HorizontalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i+1,j), IsDrawn = false, DotSpacing = DOT_SPACING };
                     if (j <= BoardSize)
-                        VerticalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i, j+1), IsDrawn = false };
+                        VerticalLines[i, j] = new Line { Start = new Point(i, j), End = new Point(i, j+1), IsDrawn = false, DotSpacing = DOT_SPACING };
                     if (i < BoardSize && j < BoardSize)
-                        Squares[i, j] = new Square { TopLeft = new Point(i * DOT_SPACING, j * DOT_SPACING), Owner = null };
+                        Squares[i, j] = new Square { TopLeft = new Point(i * DOT_SPACING, j * DOT_SPACING), Owner = null, Size = DOT_SPACING };
                 }
             }
 
@@ -228,17 +228,17 @@ namespace MakeItSquare
                 {
                     if (HorizontalLines[i, j].IsDrawn)
                     {
-                        HorizontalLines[i, j].Draw(g, DOT_SPACING);
+                        HorizontalLines[i, j].Draw(g);
                     }
 
                     if (i <= BoardSize && VerticalLines[i, j].IsDrawn)
                     {
-                        VerticalLines[i, j].Draw(g, DOT_SPACING);
+                        VerticalLines[i, j].Draw(g);
                     }
 
                     if(i < BoardSize && j < BoardSize && Squares[i,j].Owner != null)
                     {
-                        Squares[i, j].Draw(g, Squares[i, j].Owner.Color, DOT_SPACING);
+                        Squares[i, j].Draw(g, Squares[i, j].Owner.Color);
                     }
                 }
             }

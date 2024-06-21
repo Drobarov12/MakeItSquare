@@ -11,6 +11,7 @@ namespace MakeItSquare
         public Point Start { get; set; }
         public Point End { get; set; }
         public bool IsDrawn { get; set; }
+        public int  DotSpacing { get; set; }
 
         public bool Equals(Line other)
         {
@@ -18,11 +19,11 @@ namespace MakeItSquare
                    (this.Start == other.End && this.End == other.Start);
         }
 
-        public void Draw(Graphics g, int dotSpace)
+        public void Draw(Graphics g)
         {
             Pen p = new Pen(Color.Black, 2);
-            g.DrawLine(p, Start.X * dotSpace, Start.Y * dotSpace,
-                            End.X * dotSpace, End.Y * dotSpace);
+            g.DrawLine(p, Start.X * DotSpacing, Start.Y * DotSpacing,
+                            End.X * DotSpacing, End.Y * DotSpacing);
         }
     }
 }
