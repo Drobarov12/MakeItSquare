@@ -4,41 +4,47 @@ namespace MakeItSquare
     public partial class Form1 : Form
     {
         private Game _game;
-        private const int BOARD_SIZE = 4;
+        private List<Player> _players;
 
-        public Form1()
+        public Form1(List<Player> players, int bordSize)
         {
             InitializeComponent();
-            Init();
-
+            _players = players;
+            Init(bordSize);
+            this.DoubleBuffered = true;
         }
 
-        private void Init()
+        private void Init(int bordSize)
         {
-            Player[] players = new Player[]
-            {
-                new Player { Name = "Player 1", Color = Color.Red },
-                new Player { Name = "Player 2", Color = Color.Blue }
-            };
+            _game = new Game(bordSize, _players);
 
-            _game = new Game(BOARD_SIZE, players);
-
+            CreateListOfPlayers();
+            playerLabel.Text = _game.GetCurrentPlayer().Name;
             myPanel.ClientSize = _game.GameSize();
+            
+            UpdatePlayersScore();
+            
             Invalidate();
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void CreateListOfPlayers()
         {
-           /* Graphics g = e.Graphics;
-            _game.Draw(g);*/
+            playersList.Items.Clear();
+            _players.ForEach(x => playersList.Items.Add(x.Name));
+            SetBackgroundColorOnItems();
         }
 
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        private void SetBackgroundColorOnItems()
         {
-           /* Point clickedPoint = new Point(e.X, e.Y);
-            bool valid = _game.Clicked(clickedPoint);
-            if (valid) Invalidate();*/
+            foreach (ListViewItem player in playersList.Items)
+            {
+                var p = _players.First(x => x.Name == player.Text);
+                if (p is not null)
+                    player.BackColor = p.Color;
+
+            }
         }
+
 
         private void myPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -50,7 +56,25 @@ namespace MakeItSquare
         {
             Point clickedPoint = new Point(e.X, e.Y);
             bool valid = _game.Clicked(clickedPoint);
-            if (valid) myPanel.Invalidate();
+            if (valid)
+            {
+                playerLabel.Text = _game.GetCurrentPlayer().Name;
+                UpdatePlayersScore();
+                myPanel.Invalidate();
+            }
+
+        }
+
+        private void UpdatePlayersScore()
+        {
+            playersScoreLB.Enabled = false;
+            playersScoreLB.Items.Clear();
+            _players.ForEach(p => playersScoreLB.Items.Add(p));
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
