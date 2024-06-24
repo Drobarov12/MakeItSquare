@@ -13,14 +13,14 @@ namespace MakeItSquare
         public Line[,] HorizontalLines { get; private set; }
         public Line[,] VerticalLines { get; private set; }
         public Square[,] Squares { get; private set; }
-        public Player[] Players { get; private set; }
+        public List<Player> Players { get; private set; }
         private List<Point> dots;
         private int currentPlayerIndex;
         private const int DOT_SPACING = 50;
         private const int DOT_SIZE = 7;
 
 
-        public Game(int boardSize, Player[] players)
+        public Game(int boardSize,List<Player> players)
         {
             BoardSize = boardSize;
             Players = players;
@@ -60,7 +60,6 @@ namespace MakeItSquare
             }
 
             DrawOutsideLines();
-
         }
 
         private void DrawOutsideLines()
@@ -171,7 +170,7 @@ namespace MakeItSquare
 
         private void SwitchPlayer()
         {
-            currentPlayerIndex = (currentPlayerIndex + 1) % Players.Length;
+            currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
         }
 
         private void UpdateScore()
