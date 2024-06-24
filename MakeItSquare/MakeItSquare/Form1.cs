@@ -4,24 +4,17 @@ namespace MakeItSquare
     public partial class Form1 : Form
     {
         private Game _game;
-        private const int BOARD_SIZE = 4;
 
-        public Form1()
+        public Form1(List<Player> players, int bordSize)
         {
             InitializeComponent();
-            Init();
+            Init(players, bordSize);
 
         }
 
-        private void Init()
+        private void Init(List<Player> players, int bordSize)
         {
-            var players = new List<Player>
-            {
-                new Player { Name = "Player 1", Color = Color.Red },
-                new Player { Name = "Player 2", Color = Color.Blue }
-            };
-
-            _game = new Game(BOARD_SIZE, players);
+            _game = new Game(bordSize, players);
             CreateListOfPlayers(players);
             playerLabel.Text = _game.GetCurrentPlayer().Name;
 
