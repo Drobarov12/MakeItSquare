@@ -44,7 +44,9 @@ namespace MakeItSquare
             };
 
             var gameForm = new Form1(listOfPlayers, (int)gameSizeNumber.Value);
-            gameForm.ShowDialog();
+            Hide();
+            gameForm.Show();
+            gameForm.FormClosed += (s, args) => this.Show();
         }
     }
 }

@@ -34,9 +34,9 @@ namespace MakeItSquare
             foreach (ListViewItem player in playersList.Items)
             {
                 var p = players.First(x => x.Name == player.Text);
-                if(p is not null)
+                if (p is not null)
                     player.BackColor = p.Color;
-                
+
             }
         }
 
@@ -69,6 +69,11 @@ namespace MakeItSquare
                 myPanel.Invalidate();
             }
 
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
