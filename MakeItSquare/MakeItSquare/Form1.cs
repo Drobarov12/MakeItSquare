@@ -4,54 +4,47 @@ namespace MakeItSquare
     public partial class Form1 : Form
     {
         private Game _game;
+        private List<Player> _players;
 
         public Form1(List<Player> players, int bordSize)
         {
             InitializeComponent();
-            Init(players, bordSize);
+            _players = players;
+            Init(bordSize);
             this.DoubleBuffered = true;
         }
 
-        private void Init(List<Player> players, int bordSize)
+        private void Init(int bordSize)
         {
-            _game = new Game(bordSize, players);
-            CreateListOfPlayers(players);
-            playerLabel.Text = _game.GetCurrentPlayer().Name;
+            _game = new Game(bordSize, _players);
 
+            CreateListOfPlayers();
+            playerLabel.Text = _game.GetCurrentPlayer().Name;
             myPanel.ClientSize = _game.GameSize();
+            
+            UpdatePlayersScore();
+            
             Invalidate();
         }
 
-        private void CreateListOfPlayers(List<Player> players)
+        private void CreateListOfPlayers()
         {
             playersList.Items.Clear();
-            players.ForEach(x => playersList.Items.Add(x.Name));
-            SetBackgroundColorOnItems(players);
+            _players.ForEach(x => playersList.Items.Add(x.Name));
+            SetBackgroundColorOnItems();
         }
 
-        private void SetBackgroundColorOnItems(List<Player> players)
+        private void SetBackgroundColorOnItems()
         {
             foreach (ListViewItem player in playersList.Items)
             {
-                var p = players.First(x => x.Name == player.Text);
+                var p = _players.First(x => x.Name == player.Text);
                 if (p is not null)
                     player.BackColor = p.Color;
 
             }
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-           /* Graphics g = e.Graphics;
-            _game.Draw(g);*/
-        }
-
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
-        {
-           /* Point clickedPoint = new Point(e.X, e.Y);
-            bool valid = _game.Clicked(clickedPoint);
-            if (valid) Invalidate();*/
-        }
 
         private void myPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -66,9 +59,17 @@ namespace MakeItSquare
             if (valid)
             {
                 playerLabel.Text = _game.GetCurrentPlayer().Name;
+                UpdatePlayersScore();
                 myPanel.Invalidate();
             }
 
+        }
+
+        private void UpdatePlayersScore()
+        {
+            playersScoreLB.Enabled = false;
+            playersScoreLB.Items.Clear();
+            _players.ForEach(p => playersScoreLB.Items.Add(p));
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)

@@ -11,5 +11,10 @@ namespace MakeItSquare
         public string Name { get; set; }
         public int Score { get; set; }
         public Color Color { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} score: {Score}";
+        }
     }
 }
