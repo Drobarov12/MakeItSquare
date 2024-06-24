@@ -9,7 +9,7 @@ namespace MakeItSquare
         {
             InitializeComponent();
             Init(players, bordSize);
-
+            this.DoubleBuffered = true;
         }
 
         private void Init(List<Player> players, int bordSize)
