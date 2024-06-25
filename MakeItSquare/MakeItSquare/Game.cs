@@ -264,28 +264,9 @@ namespace MakeItSquare
 
         public List<Player> PlayerWon()
         {
-            Dictionary<Player, int> playerSquareCounts = new Dictionary<Player, int>();
+            int maxScore = Players.Max(player => player.Score);
 
-            Players.ForEach(x=> playerSquareCounts[x] = 0);
-            
-            for (int i = 0; i < BoardSize; i++)
-            {
-                for (int j = 0; j < BoardSize; j++)
-                {
-                    Player owner = Squares[i, j].Owner;
-                    if (owner != null)
-                    {
-                        playerSquareCounts[owner]++;
-                    }
-                }
-            }
-
-            int maxSquares = playerSquareCounts.Values.Max();
-
-            // Find all players with the maximum count of squares
-            List<Player> winners = playerSquareCounts.Where(kvp => kvp.Value == maxSquares)
-                                                     .Select(kvp => kvp.Key)
-                                                     .ToList();
+            var winners = Players.Where(player => player.Score == maxScore).ToList();
 
             return winners;
         }
