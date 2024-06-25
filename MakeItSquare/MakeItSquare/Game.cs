@@ -14,6 +14,7 @@ namespace MakeItSquare
         public Line[,] VerticalLines { get; private set; }
         public Square[,] Squares { get; private set; }
         public List<Player> Players { get; private set; }
+        public bool IsFinished { get; set; }
         private List<Point> dots;
         private int currentPlayerIndex;
         private const int DOT_SPACING = 50;
@@ -26,7 +27,7 @@ namespace MakeItSquare
             Players = players;
             currentPlayerIndex = 0;
             dots = new List<Point>();
-
+            IsFinished = false;
             InitializeBoard();
         }
 
@@ -126,6 +127,7 @@ namespace MakeItSquare
                     Squares[x, y - 1].Owner = GetCurrentPlayer();
                     GetCurrentPlayer().Score++;
                     squareCompleted = true;
+                    CheckIfFinished();
                 }
                 if (y < BoardSize && HorizontalLines[x, y + 1].IsDrawn &&
                     VerticalLines[x, y].IsDrawn && VerticalLines[x + 1, y].IsDrawn)
@@ -133,6 +135,7 @@ namespace MakeItSquare
                     Squares[x, y].Owner = GetCurrentPlayer();
                     GetCurrentPlayer().Score++;
                     squareCompleted = true;
+                    CheckIfFinished();
                 }
             }
             else if (isVertical)
@@ -144,6 +147,7 @@ namespace MakeItSquare
                     Squares[x - 1, y].Owner = GetCurrentPlayer();
                     GetCurrentPlayer().Score++;
                     squareCompleted = true;
+                    CheckIfFinished();
                 }
                 if (x < BoardSize && VerticalLines[x + 1, y].IsDrawn &&
                     HorizontalLines[x, y].IsDrawn && HorizontalLines[x, y + 1].IsDrawn)
@@ -151,6 +155,7 @@ namespace MakeItSquare
                     Squares[x, y].Owner = GetCurrentPlayer();
                     GetCurrentPlayer().Score++;
                     squareCompleted = true;
+                    CheckIfFinished();
                 }
             }
 
@@ -163,6 +168,20 @@ namespace MakeItSquare
 
         }
 
+        private void CheckIfFinished()
+        {
+            var hasEmpty = false;
+            for (int i = 0; i < BoardSize; i++)
+            {
+                for (int j = 0; j < BoardSize; j++)
+                {
+                    if (Squares[i,j].Owner == null)
+                        hasEmpty = true;
+                }
+            }
+            IsFinished = !hasEmpty;
+        }
+
         public Player GetCurrentPlayer()
         {
             return Players[currentPlayerIndex];
@@ -171,11 +190,6 @@ namespace MakeItSquare
         private void SwitchPlayer()
         {
             currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
-        }
-
-        private void UpdateScore()
-        {
-            // Update the score for the current player if a square is completed
         }
 
         public bool Clicked(Point clickedPoint)
@@ -246,6 +260,34 @@ namespace MakeItSquare
             }
 
             g.Dispose();
+        }
+
+        public List<Player> PlayerWon()
+        {
+            Dictionary<Player, int> playerSquareCounts = new Dictionary<Player, int>();
+
+            Players.ForEach(x=> playerSquareCounts[x] = 0);
+            
+            for (int i = 0; i < BoardSize; i++)
+            {
+                for (int j = 0; j < BoardSize; j++)
+                {
+                    Player owner = Squares[i, j].Owner;
+                    if (owner != null)
+                    {
+                        playerSquareCounts[owner]++;
+                    }
+                }
+            }
+
+            int maxSquares = playerSquareCounts.Values.Max();
+
+            // Find all players with the maximum count of squares
+            List<Player> winners = playerSquareCounts.Where(kvp => kvp.Value == maxSquares)
+                                                     .Select(kvp => kvp.Key)
+                                                     .ToList();
+
+            return winners;
         }
     }
 }

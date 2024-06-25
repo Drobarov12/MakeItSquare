@@ -62,7 +62,36 @@ namespace MakeItSquare
                 UpdatePlayersScore();
                 myPanel.Invalidate();
             }
+            if(_game.IsFinished)
+            {
+                HandelFinishedGame();
+                
+            }
 
+        }
+
+        private void HandelFinishedGame()
+        {
+            var wonPlayer = _game.PlayerWon();
+            string message;
+            if(wonPlayer.Count == 1)
+            {
+                message = $"{wonPlayer[0].Name} won the game !!!";
+            }
+            else
+            {
+                message = "It's a draw!";
+            }
+
+            DialogResult result = MessageBox.Show(message, "Play another game?", MessageBoxButtons.YesNoCancel);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                Close();
+            }
+            else
+            {
+                Application.Exit();
+            }
         }
 
         private void UpdatePlayersScore()
