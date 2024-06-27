@@ -15,6 +15,7 @@ namespace MakeItSquare
         public NewGameForm()
         {
             InitializeComponent();
+            Text = "New Game";
         }
 
         private void playerOneColorButton_Click(object sender, EventArgs e)

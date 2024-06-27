@@ -1,14 +1,20 @@
 
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+
 namespace MakeItSquare
 {
     public partial class Form1 : Form
     {
         private Game _game;
         private List<Player> _players;
+        public string FileName { get; set; }
 
         public Form1(List<Player> players, int bordSize)
         {
             InitializeComponent();
+            Text = "Game";
             _players = players;
             Init(bordSize);
             this.DoubleBuffered = true;
@@ -21,9 +27,9 @@ namespace MakeItSquare
             CreateListOfPlayers();
             playerLabel.Text = _game.GetCurrentPlayer().Name;
             myPanel.ClientSize = _game.GameSize();
-            
+
             UpdatePlayersScore();
-            
+
             Invalidate();
         }
 
@@ -62,10 +68,10 @@ namespace MakeItSquare
                 UpdatePlayersScore();
                 myPanel.Invalidate();
             }
-            if(_game.IsFinished)
+            if (_game.IsFinished)
             {
                 HandelFinishedGame();
-                
+
             }
 
         }
@@ -74,7 +80,7 @@ namespace MakeItSquare
         {
             var wonPlayer = _game.PlayerWon();
             string message;
-            if(wonPlayer.Count == 1)
+            if (wonPlayer.Count == 1)
             {
                 message = $"{wonPlayer[0].Name} won the game !!!";
             }
@@ -83,7 +89,7 @@ namespace MakeItSquare
                 message = "It's a draw!";
             }
 
-            DialogResult result = MessageBox.Show(message, "Play another game?", MessageBoxButtons.YesNoCancel);
+            DialogResult result = MessageBox.Show(message, "Play another game?", MessageBoxButtons.YesNo);
             if (result == System.Windows.Forms.DialogResult.Yes)
             {
                 Close();
@@ -104,6 +110,68 @@ namespace MakeItSquare
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFile();
+        }
+
+        private void SaveFile()
+        {
+            if (FileName == null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "MakeItSqeare doc file (*.square)|*.square";
+                saveFileDialog.Title = "Save MakeItSqeare doc";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    FileName = saveFileDialog.FileName;
+                }
+            }
+            if (FileName != null)
+            {
+                using (FileStream fileStream = new FileStream(FileName, FileMode.Create))
+                {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                    IFormatter formatter = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    formatter.Serialize(fileStream, _game);
+                }
+            }
+        }
+
+        private void OpenFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "MakeItSqeare doc file (*.square)|*.square";
+            openFileDialog.Title = "Save MakeItSqeare doc";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                FileName = openFileDialog.FileName;
+                try
+                {
+                    using (FileStream fileStream = new FileStream(FileName, FileMode.Open))
+                    {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                        IFormatter formater = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                        _game = (Game)formater.Deserialize(fileStream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Could not read file: " + FileName);
+                    FileName = null;
+                    return;
+                }
+                Invalidate(true);
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFile();
         }
     }
 }
