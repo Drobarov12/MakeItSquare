@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MakeItSquare
 {
+    [Serializable]
     public class Square
     {
         public Point TopLeft { get; set; }

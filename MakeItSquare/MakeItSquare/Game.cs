@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace MakeItSquare
 {
+    [Serializable]
     public class Game
     {
         public int BoardSize { get; private set; }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MakeItSquare
 {
+    [Serializable]
     public class Line
     {
         public Point Start { get; set; }
