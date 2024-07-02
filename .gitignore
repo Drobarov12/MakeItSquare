@@ -6,8 +6,6 @@ obj/
 
 *.log
 
-*.dll
-*.exe
 *.out
 *.app
 
